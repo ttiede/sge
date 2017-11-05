@@ -1,9 +1,15 @@
 package br.com.matera.sge.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DirectMailing {
+	@JsonProperty("nome")
 	private String name;
+	@JsonProperty("endereco")
 	private String address;
+	@JsonProperty("cep")
 	private String zipCode;
+	@JsonProperty("mensagem")
 	private String message;
 
 	public DirectMailing() {

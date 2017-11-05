@@ -2,19 +2,23 @@ package br.com.matera.sge.model;
 
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Course {
 	private String id;
-	private String cpf;
+	@JsonProperty("cpf")
+	private String document;
+	@JsonProperty("notas")
 	private HashMap<String, Double> score;
 
 	public Course() {
 
 	}
 
-	public Course(String id, String cpf, HashMap<String, Double> score) {
+	public Course(String id, String document, HashMap<String, Double> score) {
 		super();
 		this.id = id;
-		this.cpf= cpf;
+		this.document= document;
 		this.score = score;
 	}
 
@@ -26,8 +30,16 @@ public class Course {
 		this.id = id;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getDocument() {
+		return document;
+	}
+
+	public void setDocument(String document) {
+		this.document = document;
+	}
+
+	public void setScore(HashMap<String, Double> score) {
+		this.score = score;
 	}
 
 	public HashMap<String, Double> getScore() {
@@ -37,7 +49,7 @@ public class Course {
 	@Override
 	public String toString() {
 		return String.format(
-				"Course [id=%s, cpf=%s, score=%s]", id, cpf, score);
+				"Course [id=%s, cpf=%s, score=%s]", id, document, score);
 	}
 
 	@Override
