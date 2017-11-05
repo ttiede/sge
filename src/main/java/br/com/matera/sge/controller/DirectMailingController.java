@@ -19,6 +19,6 @@ public class DirectMailingController {
 	
 	@PostMapping("/maladireta")
 	public String registerStudentForMailing(@RequestBody List<DirectMailing> mailings) {
-		return ""+ directMailingService.retrieveElegibleStudents(mailings) + "";
+		return String.valueOf(directMailingService.retrieveElegibleStudents(mailings));
 	}
 }

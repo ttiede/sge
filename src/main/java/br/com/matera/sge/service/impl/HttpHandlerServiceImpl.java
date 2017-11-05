@@ -30,15 +30,12 @@ public class HttpHandlerServiceImpl implements HttpHandlerService {
 			httpURLConnection.addRequestProperty("Accept", "application/json");
 			httpURLConnection.setRequestMethod("GET");
 			httpURLConnection.connect();
-			final String content;
+			String content;
 			if (httpURLConnection.getResponseCode() < 400) {
 				content = StaticsUtils.extractToString(httpURLConnection.getInputStream());
 			} else {
 				content = StaticsUtils.extractToString(httpURLConnection.getErrorStream());
 			}
-			// final String content = "{\"sendSmsResponse\" : {\"statusCode\" :
-			// \"00\",\"statusDescription\" : \"Ok\",\"detailCode\" :
-			// \"000\",\"detailDescription\" : \"Message Sent\"}}";
 			return content;
 		} catch (final Exception e) {
 			final String message = "erro durante a comunicacao";
