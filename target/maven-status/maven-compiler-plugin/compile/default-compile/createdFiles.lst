@@ -1,0 +1,6 @@
+br/com/matera/sge/controllers/DirectMailingController.class
+br/com/matera/sge/model/Student.class
+br/com/matera/sge/model/DirectMailing.class
+br/com/matera/sge/model/Course.class
+br/com/matera/sge/Boot.class
+br/com/matera/sge/service/StudentService.class
