@@ -1,4 +1,4 @@
-package br.com.matera.sge.controllers;
+package br.com.matera.sge.controller;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package br.com.matera.sge.service;
+package br.com.matera.sge.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.matera.sge.model.Student;
+import br.com.matera.sge.service.StudentService;
 
 @Service
 public class StudentServiceImpl  implements StudentService{
