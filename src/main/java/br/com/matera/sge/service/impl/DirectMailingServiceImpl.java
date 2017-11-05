@@ -17,7 +17,7 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 
 	@Override
 	public String retrieveElegibleStudents(List<DirectMailing> mailings) {
-		return "" + studentService.retrieveAllStudents();
+		return "" + studentService.retrieveAllStudents() +""+ mailings;
 	}
 
 }
