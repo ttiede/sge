@@ -6,6 +6,5 @@ import br.com.matera.sge.model.DirectMailing;
 
 public interface DirectMailingService {
 
-
-	public String retrieveElegibleStudents(List<DirectMailing> mailings);
+	String retrieveElegibleStudents(List<DirectMailing> mailings);
 }

@@ -4,5 +4,5 @@ import br.com.matera.sge.model.Course;
 
 public interface CourseService {
 
-	public Course retrieveCourseStudent(String studentDocument);
+	Course retrieveCourseOfStudent(String studentDocument);
 }

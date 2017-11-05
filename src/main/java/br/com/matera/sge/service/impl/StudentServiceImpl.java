@@ -30,13 +30,4 @@ public class StudentServiceImpl  implements StudentService{
 	public List<Student> retrieveAllStudents() {
 		return students;
 	}
-
-	public Student retrieveStudent(String studentDocument) {
-		for (Student student : students) {
-			if (student.getDocument().equals(studentDocument)) {
-				return student;
-			}
-		}
-		return null;
-	}
 }

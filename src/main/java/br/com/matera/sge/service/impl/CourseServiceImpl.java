@@ -9,9 +9,9 @@ import br.com.matera.sge.model.Course;
 import br.com.matera.sge.service.CourseService;
 
 @Service
-public class CourseServiceImpl  implements CourseService{
+public class CourseServiceImpl implements CourseService {
 
-	private static List<Course > courses = new ArrayList<>();
+	private static List<Course> courses = new ArrayList<>();
 
 	static {
 		// Initialize Data
@@ -21,7 +21,7 @@ public class CourseServiceImpl  implements CourseService{
 
 	}
 
-	public Course retrieveCourseStudent(String studentDocument) {
+	public Course retrieveCourseOfStudent(String studentDocument) {
 		for (Course course : courses) {
 			if (course.getDocument().equals(studentDocument)) {
 				return course;
