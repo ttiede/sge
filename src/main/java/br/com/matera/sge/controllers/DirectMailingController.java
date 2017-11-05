@@ -12,6 +12,7 @@ import br.com.matera.sge.model.DirectMailing;
 public class DirectMailingController {
 	@PostMapping("/maladireta")
 	public int registerStudentForMailing(@RequestBody List<DirectMailing> mailings) {
+		
 		return 0;
 	}
 }
