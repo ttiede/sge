@@ -47,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
 			e1.printStackTrace();
 		}
 		// Mock
-		content = "{\"cpf\": \"99999999999\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 7.4}}";
+		content = "{\"cpf\": \"99999999999\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		ObjectMapper mapper = new ObjectMapper();
 		Course course = mapper.readValue(content, Course.class);
 		return course;
