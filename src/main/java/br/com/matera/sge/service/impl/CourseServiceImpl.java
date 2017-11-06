@@ -1,10 +1,14 @@
 package br.com.matera.sge.service.impl;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.matera.sge.exception.ServiceException;
@@ -20,7 +24,7 @@ public class CourseServiceImpl implements CourseService {
 	private HttpHandlerService httpHandlerService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(HttpHandlerServiceImpl.class);
 
-	public Course retrieveCourseOfStudent(String studentDocument) {
+	public Course retrieveCourseOfStudent(String studentDocument) throws JsonParseException, JsonMappingException, IOException {
 		Course course = null;
 		try {
 			course = this.fillCourse(studentDocument);
@@ -34,7 +38,7 @@ public class CourseServiceImpl implements CourseService {
 		return null;
 	}
 
-	private Course fillCourse(String studentDocument) throws ServiceException {
+	private Course fillCourse(String studentDocument) throws ServiceException, JsonParseException, JsonMappingException, IOException {
 		final String url = "http://services.groupkt.com/state/get/br/all";
 		String content;
 		try {
@@ -45,13 +49,7 @@ public class CourseServiceImpl implements CourseService {
 		// Mock
 		content = "{\"cpf\": \"99999999999\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 7.4}}";
 		ObjectMapper mapper = new ObjectMapper();
-		try {
-			Course course = mapper.readValue(content, Course.class);
-			return course;
-		} catch (final Exception e) {
-			final String message = "erro durante a comunicacao";
-			LOGGER.error("M=handle: {}", message, e);
-			throw new ServiceException(message, e);
-		}
+		Course course = mapper.readValue(content, Course.class);
+		return course;
 	}
 }

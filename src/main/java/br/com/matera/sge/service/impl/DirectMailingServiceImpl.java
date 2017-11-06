@@ -1,11 +1,16 @@
 package br.com.matera.sge.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.com.matera.sge.exception.ServiceException;
 import br.com.matera.sge.model.Course;
@@ -25,34 +30,37 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 	private CourseService courseService;
 
 	@Override
-	public List<DirectMailing> retrieveElegibleStudents(List<DirectMailing> mailings) {
+	public List<DirectMailing> retrieveElegibleStudents(List<DirectMailing> mailings)
+			throws JsonParseException, JsonMappingException, IOException {
 		List<DirectMailing> mailingsElegileStudents = new ArrayList();
 		try {
 			List<Student> students = studentService.retrieveAllStudents();
 			for (final DirectMailing directMailing : mailings) {
-				for (final Student student : students) {
-					if (isElegible(directMailing, student)) {
-						Course courser = courseService.retrieveCourseOfStudent(student.getDocument());
-						Iterator it = courser.getScore().values().iterator();
-						while (it.hasNext()) {
-							if (Double.parseDouble(String.valueOf(it.next())) < Double.parseDouble("7.0")) {
+
+				List<Student> document = students.stream()
+						.filter(s -> s.getName().equals(directMailing.getName())
+								&& s.getAddress().equals(directMailing.getAddress())
+								&& s.getZipCode().equals(directMailing.getZipCode()))
+						.collect(Collectors.toList());
+
+				if (!document.isEmpty() && document != null) {
+					if (!String.valueOf(document.get(0).getDocument()).isEmpty()) {
+						Course course = courseService
+								.retrieveCourseOfStudent(String.valueOf(document.get(0).getDocument()));
+						if (course != null) {
+							Stream<Double> score = course.getScore().values().stream()
+									.filter(c -> Double.parseDouble(String.valueOf(c)) < Double.parseDouble("7.0"));
+							if(score != null) {
 								mailingsElegileStudents.add(directMailing);
 							}
 						}
 					}
+
 				}
 			}
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 		return mailingsElegileStudents;
-	}
-
-	private boolean isElegible(DirectMailing directMailing, Student student) {
-		if (directMailing.getAddress().equals(student.getAddress()) && directMailing.getName().equals(student.getName())
-				&& directMailing.getZipCode().equals(student.getZipCode())) {
-			return true;
-		}
-		return false;
 	}
 }

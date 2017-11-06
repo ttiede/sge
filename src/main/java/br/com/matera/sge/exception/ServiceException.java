@@ -9,5 +9,4 @@ public class ServiceException extends Exception {
 	public ServiceException(String message, Exception e) {
 		logger.error(message, e);
 	}
-
 }
