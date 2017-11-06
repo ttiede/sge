@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.matera.sge.exception.ServiceException;
 import br.com.matera.sge.model.DirectMailing;
 import br.com.matera.sge.service.DirectMailingService;
 
@@ -16,9 +17,14 @@ public class DirectMailingController {
 	@Autowired
 	private DirectMailingService directMailingService;
 
-	
 	@PostMapping("/maladireta")
 	public String registerStudentForMailing(@RequestBody List<DirectMailing> mailings) {
-		return String.valueOf(directMailingService.retrieveElegibleStudents(mailings));
+		try {
+			return String.valueOf(directMailingService.retrieveElegibleStudents(mailings).size());
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

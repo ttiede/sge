@@ -9,8 +9,12 @@ import org.apache.commons.io.IOUtils;
 
 public class StaticsUtils {
 	public static String extractToString(final InputStream inputStream) throws IOException {
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(inputStream, writer, Charset.defaultCharset());
-        return writer.toString();
-    }
+		final StringWriter writer = new StringWriter();
+		IOUtils.copy(inputStream, writer, Charset.defaultCharset());
+		return writer.toString();
+	}
+
+	public static String extractOnlyNumbers(final String value) {
+		return value.replaceAll("[^0-9]", "");
+	}
 }

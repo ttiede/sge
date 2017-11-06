@@ -9,7 +9,7 @@ public class Course {
 	@JsonProperty("cpf")
 	private String document;
 	@JsonProperty("notas")
-	private HashMap<String, Double> score;
+	private HashMap<String, Double> score = new HashMap<>();
 
 	public Course() {
 
@@ -18,7 +18,7 @@ public class Course {
 	public Course(String id, String document, HashMap<String, Double> score) {
 		super();
 		this.id = id;
-		this.document= document;
+		this.document = document;
 		this.score = score;
 	}
 
@@ -48,8 +48,7 @@ public class Course {
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Course [id=%s, cpf=%s, score=%s]", id, document, score);
+		return String.format("Course [id=%s, cpf=%s, score=%s]", id, document, score);
 	}
 
 	@Override

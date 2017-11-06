@@ -5,20 +5,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Student {
 	@JsonProperty("nome")
 	private String name;
-	@JsonProperty("cpf")
+	@JsonProperty("documento")
 	private String document;
 	@JsonProperty("endereco")
 	private String address;
 	@JsonProperty("cep")
 	private String zipCode;
 	
+	public Student() {
+		
+	}
 
 	public Student(String document, String name, String address, String zipCode) {
 		super();
 		this.name = name;
-		this.document= document;
-		this.address= address;
-		this.zipCode= zipCode;
+		this.document = document;
+		this.address = address;
+		this.zipCode = zipCode;
 	}
 
 	public String getName() {
@@ -34,9 +37,9 @@ public class Student {
 	}
 
 	public void setDocument(String document) {
-		this.document= document;
+		this.document = document;
 	}
-	
+
 	public String getAddress() {
 		return address;
 	}
@@ -55,8 +58,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Student [name=%s, document=%s, address=%s, zipCode=%s]",
-				name, document, address, zipCode);
+		return String.format("Student [name=%s, document=%s, address=%s, zipCode=%s]", name, document, address,
+				zipCode);
 	}
 }

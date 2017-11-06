@@ -1,8 +1,11 @@
 package br.com.matera.sge.service;
 
+import java.util.List;
+
+import br.com.matera.sge.exception.ServiceException;
 import br.com.matera.sge.model.Student;
 
 public interface StudentService {
 
-	java.util.List<Student> retrieveAllStudents();
+	List<Student> retrieveAllStudents() throws ServiceException;
 }

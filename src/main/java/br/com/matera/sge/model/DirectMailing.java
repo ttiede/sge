@@ -24,7 +24,6 @@ public class DirectMailing {
 		this.message = message;
 	}
 
-
 	public String getName() {
 		return name;
 	}
@@ -59,7 +58,8 @@ public class DirectMailing {
 
 	@Override
 	public String toString() {
-		return String.format("Direct Mailing [name=%s, address=%s, zipCode=%s, message=%s]", name, address, zipCode, message);
+		return String.format("Direct Mailing [name=%s, address=%s, zipCode=%s, message=%s]", name, address, zipCode,
+				message);
 	}
 
 	@Override
