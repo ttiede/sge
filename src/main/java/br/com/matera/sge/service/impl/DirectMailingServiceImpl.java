@@ -46,14 +46,8 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 						.findFirst().orElse(null);
 
 				Course course = retriveCoursesOfStudent(elegileStudent);
-				if (course != null) {
-					Optional<Double> score = course.getScore().entrySet().stream()
-							.sorted(Comparator.comparingDouble(Map.Entry::getValue)).findFirst()
-							.map(Map.Entry::getValue);
-
-					if (score.get().compareTo(Double.parseDouble("7.0")) < 0) {
-						mailingsElegileStudents.add(directMailing);
-					}
+				if (isNotApproved(course)) {
+					mailingsElegileStudents.add(directMailing);
 				}
 			}
 		} catch (ServiceException e) {
@@ -71,5 +65,17 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 		}
 		return course;
 
+	}
+
+	private Boolean isNotApproved(Course course) {
+		if ((course != null) && orderScoreByCourse(course).get().compareTo(Double.parseDouble("7.0")) < 0) {
+			return true;
+		}
+		return false;
+	}
+
+	private Optional<Double> orderScoreByCourse(Course course) {
+		return course.getScore().entrySet().stream().sorted(Comparator.comparingDouble(Map.Entry::getValue)).findFirst()
+				.map(Map.Entry::getValue);
 	}
 }
