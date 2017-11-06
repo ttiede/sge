@@ -1,16 +1,11 @@
 package br.com.matera.sge.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 
-import org.apache.commons.io.IOUtils;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import br.com.matera.sge.exception.ServiceException;
 import br.com.matera.sge.service.HttpHandlerService;

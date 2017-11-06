@@ -2,8 +2,6 @@ package br.com.matera.sge.service.impl;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ public class CourseServiceImpl implements CourseService {
 
 	@Autowired
 	private HttpHandlerService httpHandlerService;
-	private static final Logger LOGGER = LoggerFactory.getLogger(HttpHandlerServiceImpl.class);
 
 	public Course retrieveCourseOfStudent(String studentDocument) throws JsonParseException, JsonMappingException, IOException {
 		Course course = null;
@@ -39,7 +36,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	private Course fillCourse(String studentDocument) throws ServiceException, JsonParseException, JsonMappingException, IOException {
-		final String url = "http://services.groupkt.com/state/get/br/all";
+		final String url = "http://localhost:8080/"+studentDocument+"/notas";
 		String content;
 		try {
 			content = httpHandlerService.handle(url);
