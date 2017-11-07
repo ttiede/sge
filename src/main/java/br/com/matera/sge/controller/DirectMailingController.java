@@ -2,6 +2,7 @@ package br.com.matera.sge.controller;
 
 import java.util.List;
 
+import br.com.matera.sge.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,11 @@ public class DirectMailingController {
 	}
 
 	@PostMapping("/maladireta")
-	public String registerStudentForMailing(@RequestBody List<DirectMailing> mailings) throws ServiceException {
+	public Result registerStudentForMailing(@RequestBody List<DirectMailing> mailings) throws ServiceException {
 		try {
-			return String.valueOf(directMailingService.retrieveElegibleStudents(mailings).size());
+			Result result = new Result();
+			result.setStudentsAffected(directMailingService.retrieveElegibleStudents(mailings).size());
+			return result;
 		} catch (Exception e) {
             final String message = "erro durante a comunicacao";
             LOGGER.error("M=handle: {}", message, e);
