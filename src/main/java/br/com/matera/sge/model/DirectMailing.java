@@ -12,18 +12,6 @@ public class DirectMailing {
 	@JsonProperty("mensagem")
 	private String message;
 
-	public DirectMailing() {
-
-	}
-
-	public DirectMailing(String name, String address, String zipCode, String message) {
-		super();
-		this.name = name;
-		this.address = address;
-		this.zipCode = zipCode;
-		this.message = message;
-	}
-
 	public String getName() {
 		return name;
 	}

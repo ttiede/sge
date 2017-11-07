@@ -11,18 +11,6 @@ public class Student {
 	private String address;
 	@JsonProperty("cep")
 	private String zipCode;
-	
-	public Student() {
-		
-	}
-
-	public Student(String document, String name, String address, String zipCode) {
-		super();
-		this.name = name;
-		this.document = document;
-		this.address = address;
-		this.zipCode = zipCode;
-	}
 
 	public String getName() {
 		return name;

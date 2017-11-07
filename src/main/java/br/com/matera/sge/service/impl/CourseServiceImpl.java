@@ -2,11 +2,11 @@ package br.com.matera.sge.service.impl;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.matera.sge.exception.ServiceException;
@@ -17,36 +17,52 @@ import br.com.matera.sge.util.StaticsUtils;
 
 @Service
 public class CourseServiceImpl implements CourseService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CourseServiceImpl.class);
+
+	private final HttpHandlerService httpHandlerService;
 
 	@Autowired
-	private HttpHandlerService httpHandlerService;
+	public CourseServiceImpl(HttpHandlerService httpHandlerService) {
+		this.httpHandlerService = httpHandlerService;
+	}
 
-	public Course retrieveCourseOfStudent(String studentDocument) throws JsonParseException, JsonMappingException, IOException {
-		Course course = null;
+	public Course retrieveCourseOfStudent(String studentDocument) throws ServiceException {
 		try {
-			course = this.fillCourse(studentDocument);
+			Course course = this.fillCourse(studentDocument);
 			if (StaticsUtils.extractOnlyNumbers(course.getDocument())
 					.equals(StaticsUtils.extractOnlyNumbers(studentDocument))) {
 				return course;
 			}
-		} catch (ServiceException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			final String message = "erro durante a comunicacao";
+			LOGGER.error("M=handle: {}", message, e);
+			throw new ServiceException(message, e);
+
 		}
 		return null;
 	}
 
-	private Course fillCourse(String studentDocument) throws ServiceException, JsonParseException, JsonMappingException, IOException {
+	private Course fillCourse(String studentDocument) throws ServiceException{
 		final String url = "http://localhost:8080/"+studentDocument+"/notas";
 		String content;
 		try {
 			content = httpHandlerService.handle(url);
-		} catch (ServiceException e1) {
-			e1.printStackTrace();
+		} catch (Exception e1) {
+			final String message = "erro durante a comunicacao";
+			LOGGER.error("M=handle: {}", message, e1);
+			throw new ServiceException(message, e1);
 		}
 		// Mock
 		content = "{\"cpf\": \"99999999999\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		ObjectMapper mapper = new ObjectMapper();
-		Course course = mapper.readValue(content, Course.class);
+		Course course;
+		try {
+			course = mapper.readValue(content, Course.class);
+		} catch (IOException e) {
+			final String message = "erro durante a comunicacao";
+			LOGGER.error("M=handle: {}", message, e);
+			throw new ServiceException(message, e);
+		}
 		return course;
 	}
 }

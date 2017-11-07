@@ -19,11 +19,15 @@ import br.com.matera.sge.service.StudentService;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-	private static List<Student> students = new ArrayList<>();
-	private static final Logger LOGGER = LoggerFactory.getLogger(HttpHandlerServiceImpl.class);
+	private final List<Student> students = new ArrayList<>();
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
+
+	private final HttpHandlerService httpHandlerService;
 
 	@Autowired
-	private HttpHandlerService httpHandlerService;
+	public StudentServiceImpl(HttpHandlerService httpHandlerService) {
+		this.httpHandlerService = httpHandlerService;
+	}
 
 	public List<Student> retrieveAllStudents() throws ServiceException {
 		if (this.students.size() == 0) {

@@ -1,15 +1,13 @@
 package br.com.matera.sge.controller;
 
-import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import br.com.matera.sge.exception.ServiceException;
 import br.com.matera.sge.model.DirectMailing;
@@ -17,17 +15,23 @@ import br.com.matera.sge.service.DirectMailingService;
 
 @RestController
 public class DirectMailingController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DirectMailingController.class);
+
+	private final DirectMailingService directMailingService;
 
 	@Autowired
-	private DirectMailingService directMailingService;
+	public  DirectMailingController(DirectMailingService directMailingService) {
+		this.directMailingService = directMailingService;
+	}
 
 	@PostMapping("/maladireta")
-	public String registerStudentForMailing(@RequestBody List<DirectMailing> mailings) throws JsonParseException, JsonMappingException, IOException {
+	public String registerStudentForMailing(@RequestBody List<DirectMailing> mailings) throws ServiceException {
 		try {
 			return String.valueOf(directMailingService.retrieveElegibleStudents(mailings).size());
-		} catch (ServiceException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+            final String message = "erro durante a comunicacao";
+            LOGGER.error("M=handle: {}", message, e);
+            throw new ServiceException(message, e);
 		}
-		return null;
 	}
 }
