@@ -53,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
 			throw new ServiceException(message, e1);
 		}
 		// Mock
-		content = "{\"cpf\": \"99999999999\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
+		content = "{\"cpf\": \""+ StaticsUtils.extractOnlyNumbers(studentDocument) +"\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		ObjectMapper mapper = new ObjectMapper();
 		Course course;
 		try {

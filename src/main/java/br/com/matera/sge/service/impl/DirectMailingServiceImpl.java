@@ -22,9 +22,9 @@ import br.com.matera.sge.service.StudentService;
 @Service
 public class DirectMailingServiceImpl implements DirectMailingService {
 
-	private final StudentService studentService;
+	private StudentService studentService;
 
-	private final CourseService courseService;
+	private CourseService courseService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DirectMailingServiceImpl.class);
 
@@ -39,8 +39,8 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 		List<DirectMailing> mailingsElegileStudents = new ArrayList<>();
 		for (final DirectMailing directMailing : mailings) {
 			Student elegileStudent;
-			elegileStudent  = getStudent(directMailing);
-			
+			elegileStudent = getStudent(directMailing);
+
 			Course course = retriveCoursesOfStudent(elegileStudent);
 			if (isNotApproved(course)) {
 				mailingsElegileStudents.add(directMailing);
@@ -52,11 +52,10 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 	private Student getStudent(DirectMailing directMailing) throws ServiceException {
 		try {
 			for (Student s : studentService.retrieveAllStudents()) {
-			    if (s.getName().equals(directMailing.getName())
-			            && s.getAddress().equals(directMailing.getAddress())
-			            && s.getZipCode().equals(directMailing.getZipCode())) {
-			        return s;
-			    }
+				if (s.getName().equals(directMailing.getName()) && s.getAddress().equals(directMailing.getAddress())
+						&& s.getZipCode().equals(directMailing.getZipCode())) {
+					return s;
+				}
 			}
 		} catch (Exception e) {
 			final String message = "erro durante a comunicacao";
@@ -83,10 +82,11 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 	}
 
 	private Boolean isNotApproved(Course course) {
-		return course != null &&  orderScoreByCourse(course).isPresent() && orderScoreByCourse(course).get() < 7.0;
+		return course != null && orderScoreByCourse(course).isPresent() && orderScoreByCourse(course).get() < 7.0;
 	}
 
 	private Optional<Double> orderScoreByCourse(Course course) {
-		return course.getScore().entrySet().stream().sorted(Comparator.comparingDouble(Map.Entry::getValue)).findFirst().map(Map.Entry::getValue);
+		return course.getScore().entrySet().stream().sorted(Comparator.comparingDouble(Map.Entry::getValue)).findFirst()
+				.map(Map.Entry::getValue);
 	}
 }

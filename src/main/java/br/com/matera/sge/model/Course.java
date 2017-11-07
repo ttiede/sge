@@ -10,6 +10,16 @@ public class Course {
 	@JsonProperty("notas")
 	private HashMap<String, Double> score = new HashMap<>();
 
+	public Course() {
+
+	}
+
+	public Course(String cpf, HashMap<String, Double> score) {
+		super();
+		this.document= cpf;
+		this.score = score;
+	}
+	
 	public String getDocument() {
 		return document;
 	}
