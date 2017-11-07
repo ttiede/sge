@@ -18,6 +18,7 @@ import br.com.matera.sge.model.Student;
 import br.com.matera.sge.service.CourseService;
 import br.com.matera.sge.service.DirectMailingService;
 import br.com.matera.sge.service.StudentService;
+import br.com.matera.sge.util.StaticsUtils;
 
 @Service
 public class DirectMailingServiceImpl implements DirectMailingService {
@@ -42,7 +43,7 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 			elegileStudent = getStudent(directMailing);
 
 			Course course = retriveCoursesOfStudent(elegileStudent);
-			if (isNotApproved(course)) {
+			if (isNotApproved(course) && StaticsUtils.extractOnlyNumbers(course.getDocument()).equals(StaticsUtils.extractOnlyNumbers(elegileStudent.getDocument()))) {
 				mailingsElegileStudents.add(directMailing);
 			}
 		}
@@ -58,7 +59,7 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 				}
 			}
 		} catch (Exception e) {
-			final String message = "erro durante a comunicacao";
+			final String message = "Error when try connection with Student";
 			LOGGER.error("M=handle: {}", message, e);
 			throw new ServiceException(message, e);
 		}
@@ -72,7 +73,7 @@ public class DirectMailingServiceImpl implements DirectMailingService {
 			try {
 				course = courseService.retrieveCourseOfStudent(String.valueOf(documentStudente));
 			} catch (Exception e) {
-				final String message = "erro durante a comunicacao";
+				final String message = "Error when try connection with Course";
 				LOGGER.error("M=handle: {}", message, e);
 				throw new ServiceException(message, e);
 			}

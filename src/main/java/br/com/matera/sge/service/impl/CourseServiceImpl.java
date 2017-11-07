@@ -29,12 +29,11 @@ public class CourseServiceImpl implements CourseService {
 	public Course retrieveCourseOfStudent(String studentDocument) throws ServiceException {
 		try {
 			Course course = this.fillCourse(studentDocument);
-			if (StaticsUtils.extractOnlyNumbers(course.getDocument())
-					.equals(StaticsUtils.extractOnlyNumbers(studentDocument))) {
+			if (StaticsUtils.extractOnlyNumbers(course.getDocument()).equals(StaticsUtils.extractOnlyNumbers(studentDocument))) {
 				return course;
 			}
 		} catch (Exception e) {
-			final String message = "erro durante a comunicacao";
+			final String message = "Error when try retrive Course by Student";
 			LOGGER.error("M=handle: {}", message, e);
 			throw new ServiceException(message, e);
 
@@ -53,13 +52,12 @@ public class CourseServiceImpl implements CourseService {
 			throw new ServiceException(message, e1);
 		}
 		// Mock
-		content = "{\"cpf\": \""+ StaticsUtils.extractOnlyNumbers(studentDocument) +"\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		ObjectMapper mapper = new ObjectMapper();
 		Course course;
 		try {
 			course = mapper.readValue(content, Course.class);
 		} catch (IOException e) {
-			final String message = "erro durante a comunicacao";
+			final String message = "Error when try connection with Course";
 			LOGGER.error("M=handle: {}", message, e);
 			throw new ServiceException(message, e);
 		}

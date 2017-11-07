@@ -38,20 +38,18 @@ public class StudentServiceImpl implements StudentService {
 
 	private void fillStudent() throws ServiceException {	
 		final String url = "http://services.groupkt.com/state/get/br/all";
-		String content;
+		String content = null;
 		try {
 			content = httpHandlerService.handle(url);
 		} catch (ServiceException e1) {
 			e1.printStackTrace();
 		}
 		
-		// Mock
-		content = "[{\"documento\":\"999.999.999-99\",\"nome\":\"Jose da Silva\",\"endereco\":\"Rua Silvio Santos, 55\",\"cep\":\"99999-999\"},{\"documento\":\"888.888.888-88\",\"nome\":\"Jose da Silva Jr\",\"endereco\":\"Rua Silvio Santos, 54\",\"cep\":\"99999-888\"},{\"documento\":\"325.353.222-38\",\"nome\":\"Tiago Tiede\",\"endereco\":\"Rua Maestro Zeferino Santa, 132, apto 6\",\"cep\":\"18040-010\"}]";
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			this.students.addAll(Arrays.asList(mapper.readValue(content, Student[].class)));
 		} catch (final Exception e) {
-			final String message = "erro durante a comunicacao";
+			final String message = "Error when try connection";
 			LOGGER.error("M=handle: {}", message, e);
 			throw new ServiceException(message, e);
 		}
