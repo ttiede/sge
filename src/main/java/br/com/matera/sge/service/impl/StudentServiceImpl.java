@@ -41,8 +41,10 @@ public class StudentServiceImpl implements StudentService {
 		String content = null;
 		try {
 			content = httpHandlerService.handle(url);
-		} catch (ServiceException e1) {
-			e1.printStackTrace();
+		} catch (Exception e1) {
+			final String message = "Error when try connection";
+			LOGGER.error("M=handle: {}", message, e1);
+			throw new ServiceException(message, e1);
 		}
 		
 		ObjectMapper mapper = new ObjectMapper();
