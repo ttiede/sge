@@ -42,6 +42,19 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	private Course fillCourse(String studentDocument) throws ServiceException{
+		ObjectMapper mapper = new ObjectMapper();
+		Course course;
+		try {
+			course = mapper.readValue(getCourseByStudente(studentDocument), Course.class);
+		} catch (IOException e) {
+			final String message = "Error when try connection with Course";
+			LOGGER.error("M=handle: {}", message, e);
+			throw new ServiceException(message, e);
+		}
+		return course;
+	}
+	
+	public String getCourseByStudente(String studentDocument) throws ServiceException {
 		final String url = "http://localhost:8080/"+studentDocument+"/notas";
 		String content;
 		try {
@@ -51,16 +64,7 @@ public class CourseServiceImpl implements CourseService {
 			LOGGER.error("M=handle: {}", message, e1);
 			throw new ServiceException(message, e1);
 		}
-		// Mock
-		ObjectMapper mapper = new ObjectMapper();
-		Course course;
-		try {
-			course = mapper.readValue(content, Course.class);
-		} catch (IOException e) {
-			final String message = "Error when try connection with Course";
-			LOGGER.error("M=handle: {}", message, e);
-			throw new ServiceException(message, e);
-		}
-		return course;
+		return content;
+
 	}
 }

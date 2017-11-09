@@ -8,4 +8,6 @@ import br.com.matera.sge.model.Student;
 public interface StudentService {
 
 	List<Student> retrieveAllStudents() throws ServiceException;
+	String getAllStudents() throws ServiceException;
+
 }

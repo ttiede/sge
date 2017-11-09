@@ -43,10 +43,4 @@ public class Student {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
-
-	@Override
-	public String toString() {
-		return String.format("Student [name=%s, document=%s, address=%s, zipCode=%s]", name, document, address,
-				zipCode);
-	}
 }

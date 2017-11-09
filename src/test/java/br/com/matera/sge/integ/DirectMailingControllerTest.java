@@ -1,15 +1,12 @@
-package br.com.matera.sge.controller;
+package br.com.matera.sge.integ;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
+import br.com.matera.sge.Application;
+import br.com.matera.sge.exception.ServiceException;
+import br.com.matera.sge.model.Course;
+import br.com.matera.sge.model.Student;
+import br.com.matera.sge.service.CourseService;
+import br.com.matera.sge.service.StudentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,11 +21,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 
-import br.com.matera.sge.Application;
-import br.com.matera.sge.model.DirectMailing;
-import br.com.matera.sge.service.DirectMailingService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,10 +35,9 @@ import br.com.matera.sge.service.DirectMailingService;
 public class DirectMailingControllerTest {
 	String exampleMalaDiretaJson = "[{\"nome\": \"Jose da Silva\",\"endereco\": \"Rua Silvio Santos, 55\",\"cep\": \"99999-999\",\"mensagem\": \"Texto referente a mensagem para o aluno\"},{\"nome\": \"Tiago Tiede\",\"endereco\": \"Rua Maestro Zeferino Santa, 132, apto 6\",\"cep\": \"18040-010\",\"mensagem\": \"Texto referente a mensagem para o aluno\"}]";
 	@MockBean
-	DirectMailingService directMailingService;
-
-	@LocalServerPort
-	private int port;
+	StudentService studentService;
+	@MockBean
+	CourseService courseService;
 
 	private TestRestTemplate restTemplate;
 	private SimpleDateFormat df;
@@ -47,8 +45,8 @@ public class DirectMailingControllerTest {
 	private String errorMsg;
 	private String content;
 	private ObjectMapper mapper;
-	private List<DirectMailing> mailings;
-	private DirectMailing mockMailing;
+	private Course mockCourse;
+	private String contentCourse;
 
 	@Before
 	public void setData() {
@@ -60,21 +58,22 @@ public class DirectMailingControllerTest {
 				+ "\",\"status\":500,\"error\":\"Internal Server Error\",\"exception\":\"br.com.matera.sge.exception.ServiceException\",\"message\":\"erro durante a comunicacao\",\"path\":\"/maladireta\"}";
 		content = "[{\"documento\":\"123.123.123-21\",\"nome\":\"Jose da Silva\",\"endereco\":\"Rua Silvio Santos, 55\",\"cep\":\"99999-999\"}]";
 		mapper = new ObjectMapper();
-		mailings = new ArrayList<>();
 
-		mockMailing = new DirectMailing();
-		mockMailing.setAddress("Rua Maestro Zeferino Santana 132 - apto 6");
-		mockMailing.setMessage("Messagem para Aluno");
-		mockMailing.setName("Tiago Tiede");
-		mockMailing.setZipCode("18040-010");
+		mockCourse = new Course("12312312321", getScore());
+
+		contentCourse = "{\"cpf\": \"123.123.123-21\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
+
 	}
 
+	@LocalServerPort
+	private int port;
+
 	@Test
-	public void receiveOneMailing() throws Exception {
+	public void sendForOneStudent() throws Exception {
+		Mockito.when(courseService.retrieveCourseOfStudent(Mockito.anyString())).thenReturn(mockCourse);
 
-		mailings.add(mockMailing);
-
-		Mockito.when(directMailingService.retrieveElegibleStudents(Mockito.anyList())).thenReturn(Arrays.asList(mockMailing));
+		Mockito.when(studentService.retrieveAllStudents())
+				.thenReturn((Arrays.asList(mapper.readValue(content, Student[].class))));
 
 		String response = postMalaDireta();
 
@@ -83,14 +82,43 @@ public class DirectMailingControllerTest {
 	}
 
 	@Test
-	public void notreceiveMailing() throws Exception {
+	public void dontSendForStudents() throws Exception {
+		Mockito.when(courseService.retrieveCourseOfStudent(Mockito.anyString())).thenReturn(mockCourse);
 
-		Mockito.when(directMailingService.retrieveElegibleStudents(null)).thenReturn(Arrays.asList(mockMailing));
+		content = "[{\"documento\":\"225.123.123-21\",\"nome\":\"Jose da Silva\",\"endereco\":\"Rua Silvio Santos, 55\",\"cep\":\"99999-999\"}]";
+
+		Mockito.when(studentService.retrieveAllStudents())
+				.thenReturn((Arrays.asList(mapper.readValue(content, Student[].class))));
 
 		String response = postMalaDireta();
 
 		assertNotNull(response);
 		assertEquals("{\"studentsAffected\":0}", response);
+	}
+
+	@Test
+	public void serviceExceptionStudent() throws Exception {
+
+		Mockito.when(courseService.retrieveCourseOfStudent(Mockito.anyString())).thenReturn(mockCourse);
+
+		Mockito.when(studentService.retrieveAllStudents()).thenThrow(new ServiceException(content, null));
+
+		String response = postMalaDireta();
+
+		assertEquals(errorMsg, response);
+	}
+
+	@Test
+	public void serviceExceptionCourse() throws Exception {
+		Mockito.when(courseService.retrieveCourseOfStudent(Mockito.anyString()))
+				.thenThrow(new ServiceException("Course error", null));
+
+		Mockito.when(studentService.retrieveAllStudents())
+				.thenReturn((Arrays.asList(mapper.readValue(content, Student[].class))));
+
+		String response = postMalaDireta();
+
+		assertEquals(errorMsg, response);
 	}
 
 	private String createURLWithPort(String uri) {

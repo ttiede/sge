@@ -37,7 +37,18 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	private void fillStudent() throws ServiceException {	
-		final String url = "http://services.groupkt.com/state/get/br/all";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			this.students.addAll(Arrays.asList(mapper.readValue(getAllStudents(), Student[].class)));
+		} catch (final Exception e) {
+			final String message = "Error when try connection";
+			LOGGER.error("M=handle: {}", message, e);
+			throw new ServiceException(message, e);
+		}
+	}
+	
+	public String getAllStudents() throws ServiceException {
+		final String url = "http://localhost:8080/alunos";
 		String content = null;
 		try {
 			content = httpHandlerService.handle(url);
@@ -46,14 +57,6 @@ public class StudentServiceImpl implements StudentService {
 			LOGGER.error("M=handle: {}", message, e1);
 			throw new ServiceException(message, e1);
 		}
-		
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			this.students.addAll(Arrays.asList(mapper.readValue(content, Student[].class)));
-		} catch (final Exception e) {
-			final String message = "Error when try connection";
-			LOGGER.error("M=handle: {}", message, e);
-			throw new ServiceException(message, e);
-		}
+		return content;
 	}
 }
