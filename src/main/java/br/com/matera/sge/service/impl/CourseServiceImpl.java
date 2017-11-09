@@ -45,7 +45,7 @@ public class CourseServiceImpl implements CourseService {
 		ObjectMapper mapper = new ObjectMapper();
 		Course course;
 		try {
-			course = mapper.readValue(getCourseByStudente(studentDocument), Course.class);
+			course = mapper.readValue(getCourseByStudent(studentDocument), Course.class);
 		} catch (IOException e) {
 			final String message = "Error when try connection with Course";
 			LOGGER.error("M=handle: {}", message, e);
@@ -54,7 +54,7 @@ public class CourseServiceImpl implements CourseService {
 		return course;
 	}
 	
-	public String getCourseByStudente(String studentDocument) throws ServiceException {
+	public String getCourseByStudent(String studentDocument) throws ServiceException {
 		final String url = "http://localhost:8080/"+studentDocument+"/notas";
 		String content;
 		try {
@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
 			throw new ServiceException(message, e1);
 		}
 		//MOCK
-		content = "{\"cpf\": \""+ StaticsUtils.extractOnlyNumbers(studentDocument) +"\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
+		// content = "{\"cpf\": \""+ StaticsUtils.extractOnlyNumbers(studentDocument) +"\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		return content;
 
 	}

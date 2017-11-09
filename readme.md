@@ -102,10 +102,27 @@ Caso seja necessário modificações no consumo dessas `API's`,  recomendo que e
 ``` 
 // GET: /alunos/#{cpf}/notas
 // Class: CourseServiceImpl
-// Method: getCourseByStudente() 
+// Method: getCourseByStudent(String studentDocument) 
 ```
 
 
-Dentro dessas `Classes`, existe um sobrescrita dos respectivos `content` comentada conforme o exemplo enviado para o exercício `API's`
+Dentro dessas `Classes`, existe um sobrescrita de `content`, comentada conforme o exemplo enviado para o exercício `API's`
+
+
+``` 
+// GET: /alunos
+// Class: StudentServiceImpl
+// Method: getAllStudents() 
+// lines: 60,61
+```
+
+
+``` 
+// GET: /alunos/#{cpf}/notas
+// Class: CourseServiceImpl
+// Method: getCourseByStudente() 
+// lines: 67, 68
+```
+
 
 Quando descomentado essa sobre escrita do valor `content`, pode ser alterado conforme desejado. Caso seja alterado reptir o processo de build novamente.
