@@ -64,6 +64,8 @@ public class CourseServiceImpl implements CourseService {
 			LOGGER.error("M=handle: {}", message, e1);
 			throw new ServiceException(message, e1);
 		}
+		//MOCK
+		content = "{\"cpf\": \""+ StaticsUtils.extractOnlyNumbers(studentDocument) +"\",\"notas\": {\"disciplina_1\": 10,\"disciplina_2\": 8.4,\"disciplina_3\": 7.3,\"disciplina_4\": 5.4}}";
 		return content;
 
 	}
