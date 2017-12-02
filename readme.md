@@ -2,7 +2,7 @@ asdad'
 Sistema Gerencial de Estudantes!
 ===================
 
-Aplicação recebe um `POST` para executar o processo de envio de e-mail para todos os alunos com notas
+Aplicação recebe um POST para executar o processo de envio de e-mail para todos os alunos com notas
 inferiores à 7.0 e retorna a quantidade de e-mails processados. 
 
 
